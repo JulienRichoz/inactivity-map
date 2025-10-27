@@ -5,6 +5,8 @@ import { aggregateRows, formatPct, normISO3 } from '../lib/utils'
 import { motion } from 'framer-motion'
 import { Filter } from 'lucide-react'
 import Nav from '../components/Nav'
+import { assetUrl } from '../lib/utils'
+
 
 export default function CovariatesPage() {
   // --- ÉTAT ---
@@ -32,13 +34,13 @@ export default function CovariatesPage() {
     async function load() {
       try {
         // Charge fichier principal
-        const csv = await d3.csv('/data/pina_dataset.csv', d3.autoType)
+        const csv = await d3.csv(assetUrl('data/pina_dataset.csv'), d3.autoType)
         csv.forEach(d => { d.iso3 = normISO3(d.iso3) })
         setRows(csv)
         setDataMap(aggregateRows(csv))
 
         // Charge covariables (WB income, perurb, etc.)
-        const cv = await d3.csv('/data/covariates.csv', d3.autoType)
+        const cv = await d3.csv(assetUrl('data/covariates.csv'), d3.autoType)
         cv.forEach(d => { d.iso3 = normISO3(d.iso3) })
         setCovars(cv)
 

@@ -5,6 +5,7 @@ import { aggregateRows, formatPct, normISO3 } from './lib/utils'
 import { motion } from 'framer-motion'
 import { Activity } from 'lucide-react'
 import Nav from './components/Nav'
+import { assetUrl } from './lib/utils'
 
 export default function App() {
   const [rows, setRows] = useState(null)
@@ -20,10 +21,10 @@ export default function App() {
   useEffect(() => {
     async function load() {
       try {
-        const csv = await d3.csv('/data/pina_dataset.csv', d3.autoType)
+        const csv = await d3.csv(assetUrl('data/pina_dataset.csv'), d3.autoType)
         csv.forEach(d => { d.iso3 = normISO3(d.iso3) })
         setRows(csv); setDataMap(aggregateRows(csv))
-        const cv = await d3.csv('/data/covariates.csv', d3.autoType)
+        const cv = await d3.csv(assetUrl('data/covariates.csv'), d3.autoType)
         cv.forEach(d => { d.iso3 = normISO3(d.iso3) })
         setCovars(cv)
       } catch (e) { setError(String(e)) } finally { setLoading(false) }
